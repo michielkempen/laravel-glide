@@ -19,7 +19,10 @@ class Glide
      */
     public static function getUrl(string $filePath, array $manipulations): string
     {
-        $manipulator = UrlBuilderFactory::create('/', config('glide.secret'));
+        $baseUrl = config('glide.glide_endpoint_prefix');
+        $secret = config('glide.secret');
+
+        $manipulator = UrlBuilderFactory::create($baseUrl, $secret);
         $url = $manipulator->getUrl($filePath, $manipulations);
 
         return $url;
@@ -32,8 +35,11 @@ class Glide
      */
     public static function getFile(string $filePath, array $parameters = []): Response
     {
+        $baseUrl = config('glide.glide_endpoint_prefix');
+        $secret = config('glide.secret');
+
         try {
-            SignatureFactory::create(config('glide.secret'))->validateRequest($filePath, $parameters);
+            SignatureFactory::create($secret)->validateRequest($baseUrl.$filePath, $parameters);
         } catch (SignatureException $e) {
             return abort(404);
         }
@@ -46,6 +52,7 @@ class Glide
             'group_cache_in_folders' => true,
             'driver' => 'gd',
             'max_image_size' => 1024 * 1024 * 25,
+            'base_url' => config('glide.file_endpoint_prefix'),
             'response' => app(LaravelResponseFactory::class),
         ]);
 
