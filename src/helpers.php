@@ -3,11 +3,11 @@
 use MichielKempen\LaravelGlide\Glide;
 
 /**
- * @param string $fileName
+ * @param string $filePath
  * @param array $manipulations
  * @return string
  */
-function glide(string $fileName, array $manipulations): string
+function glide(string $filePath, array $manipulations): string
 {
-    return Glide::getUrl($fileName, $manipulations);
+    return Glide::getUrl($filePath, $manipulations);
 }

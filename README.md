@@ -52,16 +52,6 @@ return [
      */
     'secret' => env('GLIDE_SECRET', 'secret'),
 
-    /*
-     * The prefix of the original files endpoint.
-     */
-    'file_endpoint_prefix' => env('FILE_ENDPOINT_PREFIX', '/storage/'),
-
-    /*
-     * The prefix of the manipulated files endpoint.
-     */
-    'glide_endpoint_prefix' => env('GLIDE_ENDPOINT_PREFIX', '/glide/'),
-
 ];
 ```
 

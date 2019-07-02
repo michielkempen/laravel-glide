@@ -13,33 +13,27 @@ use Symfony\Component\HttpFoundation\Response;
 class Glide
 {
     /**
-     * @param string $fileName
+     * @param string $filePath
      * @param array $manipulations
      * @return string
      */
-    public static function getUrl(string $fileName, array $manipulations): string
+    public static function getUrl(string $filePath, array $manipulations): string
     {
-        $baseUrl = config('glide.glide_endpoint_prefix');
-        $secret = config('glide.secret');
-
-        $manipulator = UrlBuilderFactory::create($baseUrl, $secret);
-        $url = $manipulator->getUrl($fileName, $manipulations);
+        $manipulator = UrlBuilderFactory::create('/', config('glide.secret'));
+        $url = $manipulator->getUrl($filePath, $manipulations);
 
         return $url;
     }
 
     /**
-     * @param string $fileName
+     * @param string $filePath
      * @param array $parameters
      * @return Response
      */
-    public static function getFile(string $fileName, array $parameters = []): Response
+    public static function getFile(string $filePath, array $parameters = []): Response
     {
-        $baseUrl = config('glide.glide_endpoint_prefix');
-        $secret = config('glide.secret');
-
         try {
-            SignatureFactory::create($secret)->validateRequest($baseUrl.$fileName, $parameters);
+            SignatureFactory::create(config('glide.secret'))->validateRequest($filePath, $parameters);
         } catch (SignatureException $e) {
             return abort(404);
         }
@@ -52,11 +46,10 @@ class Glide
             'group_cache_in_folders' => true,
             'driver' => 'gd',
             'max_image_size' => 1024 * 1024 * 25,
-            'base_url' => config('glide.file_endpoint_prefix'),
             'response' => app(LaravelResponseFactory::class),
         ]);
 
-        $file = $glide->getImageResponse($fileName, $parameters);
+        $file = $glide->getImageResponse($filePath, $parameters);
 
         return $file;
     }

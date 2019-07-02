@@ -9,11 +9,11 @@ class GlideRequestHandler
 {
     /**
      * @param Request $request
-     * @param string $fileName
+     * @param string $filePath
      * @return Response
      */
-    public function __invoke(Request $request, string $fileName): Response
+    public function __invoke(Request $request, string $filePath): Response
     {
-        return Glide::getFile($fileName, $request->all());
+        return Glide::getFile($filePath, $request->all());
     }
 }
