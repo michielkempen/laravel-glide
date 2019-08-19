@@ -24,6 +24,7 @@ class Glide
 
         $manipulator = UrlBuilderFactory::create($baseUrl, $secret);
         $url = $manipulator->getUrl($filePath, $manipulations);
+        $url = url($url);
 
         return $url;
     }
